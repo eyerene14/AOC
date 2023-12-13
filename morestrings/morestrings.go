@@ -1,5 +1,7 @@
 // Package morestrings implements additional functions to manipulate UTF-8
 // encoded strings, beyond what is provided in the standard "strings" package.
+// SOURCE: https://go.dev/doc/code
+// USAGE: 1. cd morestrings 2. go build 3. cd ..
 package morestrings
 
 // ReverseRunes returns its argument string reversed rune-wise left to right.
