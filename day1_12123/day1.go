@@ -21,7 +21,16 @@ func check(e error) {
 // source: https://go.dev/blog/slices-intro
 var digitRegexp = regexp.MustCompile("[0-9]+")
 var b []int
-func FindDigits(filepath string) int {
+var total *Total
+type Total struct{
+	lineNo int
+	left string
+	right string
+	joined int
+	running int
+}
+
+func FindDigits(filepath string) Total {
 
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -32,42 +41,49 @@ func FindDigits(filepath string) int {
 
 	//fmt.Print(file)
 	scanner := bufio.NewScanner(file)
-
-	var total int
-	//var m [] int
-	//counter := 0
+	
 	var digitRegexp = regexp.MustCompile(`[-]?\d[\d,]*[\.]?[\d{1}]*`)
+	counter:=0
+	found:=Total{lineNo: 0}
 	// Read each line and search for the first integer
 	for scanner.Scan() {
 		line := scanner.Text()
-		//left := digitRegexp.Find(line)
-		all:=digitRegexp.FindAllString(line,-1)
-		right_i := strings.Split(all[len(all)-1], "")
-		left_i := all[0]
-		m,_:= strconv.Atoi(right_i[len(right_i)-1:][0])
-		b,_:= strconv.Atoi(left_i[:1])
-		total=b+m
-		fmt.Printf("%d%d\n",m,b)
-	}
-		/*m = string(line[int(left_i[0])])
-		//var right_i []int
-		for i := len(line[left_i[1]:]); i > 0; i-- {
-			if right_i := digitRegexp.FindIndex(line[left_i[1]:]); right_i != nil {
-				fmt.Println(right_i)
-				fmt.Println(string(line[int(right_i[0])]), m)
-				break
-			}
+		//var wn = regexp.MustCompile(`(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine)|\d?`)
+		fmt.Println(line)
+		/*if wn.MatchString(line){
+			replacer := strings.NewReplacer("one", "1","two", "2","three","3","four","4","five","5","six","6","seven","7","eight", "8","nine","9")
+			line=replacer.Replace(line)
+			fmt.Println(line)
+		*/
+		if digitRegexp.MatchString(line){		
+			all:=digitRegexp.FindAllString(line,-1)
+			fmt.Println(all)
+			right_i := strings.Split(all[len(all)-1], "")
+			//found.right,_= strconv.Atoi(right_i[len(right_i)-1:][0])
+			//found.left,_= strconv.Atoi(left_i)
+			found.right=right_i[len(right_i)-1:][0]
+			found.left=all[0][:1]
+			found.joined,_=strconv.Atoi(found.left+found.right)
+			found.running+=found.joined
+			fmt.Printf("line: %d, left: %d, right:%d, joined:%d, total:%d\n",found.lineNo,found.left,found.right,found.joined,found.running)
 		}
-		//m+=string(line[int(right_i[1])])*/
+		//}
+		found.lineNo=counter
+		counter++
+	}
 	// Check for errors during scanning
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Error reading file:", err)
 	}
-	return total
+	return found
 }
 
 func main() {
-
-	//fmt.Println(FindDigits("./day1_12123/120123_puzzle.txt"))
-	fmt.Println(FindDigits("./day1_12123/1line.txt"))
+	line:=FindDigits("./day1_12123/day1_data.txt")
+	//line:=FindDigits("./day1_12123/1line.txt")
+	total=&line
+	fmt.Println(total)
 }
+
+//>5pm:total:54702
+//>6pm:total:54916
