@@ -1,1 +1,0 @@
-var digitRegexp = regexp.MustCompile(`[&%$*#]`)

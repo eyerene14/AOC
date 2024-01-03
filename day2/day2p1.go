@@ -1,10 +1,10 @@
 package main
 
 import (
-	"adventofcode/user/hello/readdata"
+	"adventofcode/user/hello/puzzle"
 	"fmt"
 	//"io"
-	//"os"
+	"bufio"
 )
 
 func check(e error) {
@@ -28,9 +28,7 @@ var rules = &map[string]int{"red": 12,
 	"blue":  14,
 }
 
-func FindColor(file string) int {
-	//fmt.Print(file)
-	scanner := bufio.NewScanner(file)
+func FindColor(scanner *bufio.Scanner) int {
 
 	//var digitRegexp = regexp.MustCompile(`[-]?\d[\d,]*[\.]?[\d{2}]*`)
 	counter := 0
@@ -48,8 +46,7 @@ func FindDigits() {
 }
 
 func main() {
-	c := make(chan int)
-	go readdata.ReadFileLines("./day1_12123/day1_data.txt", c)
-	lines := <- c
-	fmt.Println(lines)
+	line:=FindColor(puzzle.ReadFile("./day1_12123/day1_data.txt"))
+	total:=&line
+	fmt.Println(*total)
 }
